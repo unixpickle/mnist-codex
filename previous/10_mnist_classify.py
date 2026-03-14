@@ -74,16 +74,6 @@ def line_edges(line: np.ndarray) -> tuple[float, float, float]:
     return float(positions[0] / length), float(positions[-1] / length), float(positions.size / length)
 
 
-def diagonal_runs(mask: np.ndarray, reverse: bool = False) -> float:
-    h, w = mask.shape
-    line = []
-    for x in range(w):
-        y = min(h - 1, int(round(x * (h - 1) / max(1, w - 1))))
-        sample_x = w - 1 - x if reverse else x
-        line.append(bool(mask[y, sample_x]))
-    return count_foreground_runs(np.array(line, dtype=bool))
-
-
 def connected_components(mask: np.ndarray) -> list[list[tuple[int, int]]]:
     h, w = mask.shape
     seen = np.zeros((h, w), dtype=bool)
@@ -186,8 +176,6 @@ def extract_features(image: np.ndarray) -> dict[str, float]:
             "col_height_20": 0.0,
             "col_height_50": 0.0,
             "col_height_80": 0.0,
-            "main_diag_runs": 0.0,
-            "anti_diag_runs": 0.0,
         }
 
     ys, xs = np.where(mask)
@@ -230,8 +218,6 @@ def extract_features(image: np.ndarray) -> dict[str, float]:
         col_top, _, col_height = line_edges(mask[:, x])
         features[f"col_top_{level}"] = col_top
         features[f"col_height_{level}"] = col_height
-    features["main_diag_runs"] = diagonal_runs(mask)
-    features["anti_diag_runs"] = diagonal_runs(mask, reverse=True)
     return features
 
 
@@ -260,8 +246,6 @@ class DigitClassifier:
         row_width_80 = features["row_width_80"]
         col_top_50 = features["col_top_50"]
         col_top_80 = features["col_top_80"]
-        main_diag_runs = features["main_diag_runs"]
-        anti_diag_runs = features["anti_diag_runs"]
         if digit == 0:
             return (
                 8.0 * (holes == 1.0)
@@ -300,7 +284,6 @@ class DigitClassifier:
                 + 1.5 * (row_left_50 > 0.4)
                 + 1.5 * (row_width_80 > 0.5)
                 + 1.5 * (row_left_20 < 0.38)
-                + 1.5 * (main_diag_runs >= anti_diag_runs + 0.2)
                 - 1.5 * (row_left_50 < 0.3)
                 - 2.0 * (holes == 0.0)
                 - 1.5 * (row_width_50 > 0.38)
@@ -345,9 +328,7 @@ class DigitClassifier:
                 + 1.5 * (row_width_80 < 0.5)
                 + 0.5 * (col_top_80 < 0.12)
                 + 1.0 * (left > right * 1.2)
-                + 1.5 * (anti_diag_runs >= main_diag_runs + 0.5)
                 - 1.0 * (bottom > top * 1.2)
-                - 1.0 * (main_diag_runs >= anti_diag_runs + 0.4)
                 - 1.0 * (row_left_50 > 0.32)
             )
         if digit == 6:
@@ -361,7 +342,6 @@ class DigitClassifier:
                 + 1.5 * (largest_hole > 0.015)
                 + 1.0 * (col_top_50 > 0.12)
                 + 1.0 * (middle > top * 1.35)
-                + 1.0 * (main_diag_runs >= anti_diag_runs + 0.6)
                 - 2.5 * (top > 0.26)
                 - 2.0 * (row_left_50 > 0.28)
                 - 1.0 * (top > 0.3)
