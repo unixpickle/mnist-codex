@@ -332,7 +332,6 @@ class DigitClassifier:
                 + 1.5 * (right >= left * 0.9)
                 + 1.0 * (vc50 <= 1.4)
                 + 1.0 * (middle > bottom * 2.2)
-                - 0.5 * (col_top_50 < 0.14)
             )
         if digit == 5:
             return (
@@ -351,7 +350,6 @@ class DigitClassifier:
                 - 1.0 * (bottom > top * 1.2)
                 - 1.0 * (main_diag_runs >= anti_diag_runs + 0.4)
                 - 1.0 * (row_left_50 > 0.32)
-                - 1.5 * (main_diag_runs > anti_diag_runs + 0.2)
             )
         if digit == 6:
             return (
@@ -373,9 +371,6 @@ class DigitClassifier:
                 + 1.0 * (col_top_50 > 0.12)
                 + 1.0 * (middle > top * 1.35)
                 + 1.0 * (diag_balance > 0.6)
-                + 2.5 * (main_diag_runs > anti_diag_runs + 0.35)
-                + 1.0 * (row_left_50 < 0.18)
-                + 0.75 * (bottom > top * 1.6)
                 - 2.5 * (top > 0.26)
                 - 2.0 * (row_left_50 > 0.28)
                 - 1.5 * (diag_balance < 0.2)
@@ -419,7 +414,6 @@ class DigitClassifier:
                 + 1.5 * (row_left_80 > 0.35)
                 + 1.5 * (row_width_80 < 0.32)
                 + 1.0 * (largest_hole > 0.03)
-                + 0.5 * (col_top_50 < 0.11)
                 - 1.0 * (vc50 <= 1.6)
                 - 1.0 * (col_top_50 > 0.18)
             )
