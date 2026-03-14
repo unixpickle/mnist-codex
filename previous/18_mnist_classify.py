@@ -435,7 +435,6 @@ class DigitClassifier:
                 + 0.75 * (bottom > top * 1.6)
                 - 2.5 * (top > 0.26)
                 - 2.0 * (row_left_50 > 0.28)
-                - 2.5 * (anti_diag_runs > main_diag_runs + 0.2)
                 - 1.5 * (diag_balance < 0.2)
             )
         if digit == 7:
@@ -449,9 +448,6 @@ class DigitClassifier:
                 + 1.0 * (col_top_50 < 0.091)
                 + 1.0 * (row_width_80 < 0.24)
                 + 1.0 * (bottom < top * 0.75)
-                - 2.0 * (row_width_50 > 0.42)
-                - 1.5 * (vc50 > 2.15)
-                - 1.5 * (repaired_holes > 0.45)
                 - 1.0 * (col_top_50 > 0.12)
             )
         if digit == 8:
@@ -485,8 +481,6 @@ class DigitClassifier:
                 + 1.5 * (row_left_80 > 0.35)
                 + 1.5 * (row_width_80 < 0.32)
                 + 1.0 * (largest_hole > 0.03)
-                + 1.5 * (row_width_50 > 0.4)
-                + 1.5 * (repaired_holes > 0.45)
                 + 0.5 * (col_top_50 < 0.11)
                 - 1.0 * (vc50 <= 1.6)
                 - 1.0 * (col_top_50 > 0.18)
@@ -510,11 +504,6 @@ class DigitClassifier:
     ) -> int:
         pair = {best_digit, second_digit}
         if pair == {3, 5} and abs(scores[3] - scores[5]) <= 2.0:
-            if (
-                features["upper_left"] > features["upper_right"] * 1.08
-                and features["row_left_50"] < 0.24
-            ):
-                return 5
             if features["right"] > features["left"] * 1.1 and features["row_left_50"] > 0.22:
                 return 3
             if features["anti_diag_runs"] > features["main_diag_runs"] + 0.2 and features["row_left_50"] < 0.26:
