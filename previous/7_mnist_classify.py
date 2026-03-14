@@ -256,10 +256,8 @@ class DigitClassifier:
                 + 1.5 * (largest_hole > 0.1)
                 + 2.0 * (0.42 <= hole_y <= 0.6)
                 + 1.5 * (abs(top - bottom) < 0.12)
-                + 1.0 * (0.28 <= row_width_50 <= 0.5)
                 - 2.5 * (hole_y > 0.62)
                 - 2.5 * (hole_y < 0.4)
-                - 2.0 * (holes >= 2.0)
             )
         if digit == 1:
             return (
@@ -269,10 +267,7 @@ class DigitClassifier:
                 + 2.5 * (vc50 <= 1.2)
                 + 1.0 * (features["vc35"] < 2.0)
                 + 2.0 * (features["center"] > max(left, right) * 1.7)
-                + 1.0 * (aspect_ratio < 0.52)
-                + 1.0 * (features["center"] > max(left, right) * 2.0)
                 - 2.0 * fill
-                - 1.0 * (vc50 > 1.5)
             )
         if digit == 2:
             return (
@@ -313,8 +308,6 @@ class DigitClassifier:
                 + 2.5 * (hr35 >= 1.7)
                 + 2.0 * (hr80 <= 1.2)
                 + 1.5 * (right >= left * 0.9)
-                + 1.0 * (vc50 <= 1.4)
-                + 1.0 * (middle > bottom * 2.2)
             )
         if digit == 5:
             return (
@@ -328,9 +321,6 @@ class DigitClassifier:
                 + 2.0 * (row_left_50 < 0.3)
                 + 1.5 * (row_width_80 < 0.5)
                 + 0.5 * (col_top_80 < 0.12)
-                + 1.0 * (left > right * 1.2)
-                - 1.0 * (bottom > top * 1.2)
-                - 1.0 * (row_left_50 > 0.32)
             )
         if digit == 6:
             return (
@@ -341,12 +331,9 @@ class DigitClassifier:
                 + 2.0 * (hr65 >= 1.6)
                 + 1.5 * (hr20 <= 1.2)
                 + 1.5 * (largest_hole > 0.015)
-                + 1.0 * (col_top_50 > 0.12)
-                + 1.0 * (middle > top * 1.35)
                 - 2.5 * (top > 0.26)
                 - 2.0 * (row_left_50 > 0.28)
                 - 1.0 * (top > 0.3)
-                - 1.0 * (row_left_50 > 0.25)
             )
         if digit == 7:
             return (
@@ -357,9 +344,6 @@ class DigitClassifier:
                 + 2.0 * (hr65 <= 1.2)
                 + 1.5 * (features["upper_right"] > features["upper_left"])
                 + 1.0 * (col_top_50 < 0.091)
-                + 1.0 * (row_width_80 < 0.24)
-                + 1.0 * (bottom < top * 0.75)
-                - 1.0 * (col_top_50 > 0.12)
             )
         if digit == 8:
             return (
@@ -374,7 +358,6 @@ class DigitClassifier:
                 + 1.5 * (0.35 <= hole_y <= 0.65)
                 + 1.5 * (row_width_80 < 0.52)
                 + 1.5 * (features["lower_left"] > features["lower_right"] * 1.08)
-                - 1.5 * (holes == 1.0 and largest_hole > 0.1)
             )
         if digit == 9:
             return (
@@ -387,8 +370,6 @@ class DigitClassifier:
                 + 1.5 * (row_left_80 > 0.35)
                 + 1.5 * (row_width_80 < 0.32)
                 + 1.0 * (largest_hole > 0.03)
-                - 1.0 * (vc50 <= 1.6)
-                - 1.0 * (col_top_50 > 0.18)
             )
         raise ValueError(f"Unexpected digit: {digit}")
 
