@@ -262,7 +262,6 @@ class DigitClassifier:
         col_top_80 = features["col_top_80"]
         main_diag_runs = features["main_diag_runs"]
         anti_diag_runs = features["anti_diag_runs"]
-        diag_balance = main_diag_runs - anti_diag_runs
         if digit == 0:
             return (
                 8.0 * (holes == 1.0)
@@ -354,14 +353,6 @@ class DigitClassifier:
         if digit == 6:
             return (
                 8.0 * (holes == 1.0)
-                + 3.5
-                * (
-                    holes == 0.0
-                    and top < 0.25
-                    and bottom > middle * 1.1
-                    and col_top_50 > 0.14
-                    and diag_balance > 0.45
-                )
                 + 3.5 * (hole_y > 0.56)
                 + 2.5 * (bottom > top * 1.35)
                 + 2.0 * (left >= right * 1.05)
@@ -370,10 +361,11 @@ class DigitClassifier:
                 + 1.5 * (largest_hole > 0.015)
                 + 1.0 * (col_top_50 > 0.12)
                 + 1.0 * (middle > top * 1.35)
-                + 1.0 * (diag_balance > 0.6)
+                + 1.0 * (main_diag_runs >= anti_diag_runs + 0.6)
                 - 2.5 * (top > 0.26)
                 - 2.0 * (row_left_50 > 0.28)
-                - 1.5 * (diag_balance < 0.2)
+                - 1.0 * (top > 0.3)
+                - 1.0 * (row_left_50 > 0.25)
             )
         if digit == 7:
             return (
@@ -436,17 +428,9 @@ class DigitClassifier:
     ) -> int:
         pair = {best_digit, second_digit}
         if pair == {3, 5} and abs(scores[3] - scores[5]) <= 2.0:
-            if features["right"] > features["left"] * 1.1 and features["row_left_50"] > 0.22:
-                return 3
-            if features["anti_diag_runs"] > features["main_diag_runs"] + 0.2 and features["row_left_50"] < 0.26:
-                return 5
-            if features["row_left_50"] < 0.18:
+            if features["row_left_50"] < 0.133:
                 return 5
             return 3
-        if pair == {2, 8} and abs(scores[2] - scores[8]) <= 2.5:
-            if features["row_left_50"] > 0.45 and features["top"] < 0.34:
-                return 2
-            return 8
         if pair == {4, 9} and abs(scores[4] - scores[9]) <= 2.5:
             if features["top"] < 0.295:
                 return 4
