@@ -281,8 +281,6 @@ class DigitClassifier:
                 + 2.0 * (vc50 >= 2.5)
                 + 2.0 * (row_width_50 > 0.35)
                 + 1.5 * (row_left_80 > 0.16)
-                - 2.0 * (row_left_50 < 0.24)
-                - 2.0 * (left > right * 0.95)
                 - 1.5 * (features["lower_left"] > features["lower_right"] * 1.1)
             )
         if digit == 4:
@@ -316,8 +314,6 @@ class DigitClassifier:
                 + 2.0 * (hr65 >= 1.6)
                 + 1.5 * (hr20 <= 1.2)
                 + 1.5 * (largest_hole > 0.015)
-                - 2.5 * (top > 0.26)
-                - 2.0 * (row_left_50 > 0.28)
                 - 1.0 * (top > 0.3)
             )
         if digit == 7:
