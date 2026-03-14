@@ -267,8 +267,6 @@ class DigitClassifier:
                 + 1.5 * (row_width_80 > 0.5)
                 + 1.5 * (row_left_20 < 0.38)
                 - 1.5 * (row_left_50 < 0.3)
-                - 2.0 * (holes == 0.0)
-                - 1.5 * (row_width_50 > 0.38)
             )
         if digit == 3:
             return (
@@ -278,7 +276,6 @@ class DigitClassifier:
                 + 2.0 * (bottom > 0.22)
                 + 2.0 * (hr20 <= 1.6 and hr80 <= 1.6)
                 + 1.5 * (vc50 >= 2.3)
-                + 2.0 * (vc50 >= 2.5)
                 + 2.0 * (row_width_50 > 0.35)
                 + 1.5 * (row_left_80 > 0.16)
                 - 1.5 * (features["lower_left"] > features["lower_right"] * 1.1)
@@ -337,7 +334,6 @@ class DigitClassifier:
                 + 1.5 * (largest_hole > 0.025)
                 + 1.5 * (0.35 <= hole_y <= 0.65)
                 + 1.5 * (row_width_80 < 0.52)
-                + 1.5 * (features["lower_left"] > features["lower_right"] * 1.08)
             )
         if digit == 9:
             return (
