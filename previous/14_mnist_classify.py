@@ -462,7 +462,7 @@ class DigitClassifier:
                 return 2
             return 6
         if pair == {4, 9} and abs(scores[4] - scores[9]) <= 2.5:
-            if features["top"] < 0.295 or features["col_top_50"] > 0.18:
+            if features["top"] < 0.295:
                 return 4
             return 9
         if pair == {5, 6} and abs(scores[5] - scores[6]) <= 2.5:
