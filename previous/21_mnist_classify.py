@@ -289,25 +289,6 @@ class DigitClassifier:
         anti_diag_runs = features["anti_diag_runs"]
         diag_balance = main_diag_runs - anti_diag_runs
         sweeping_two = row_left_50 > 0.42 and row_width_50 < 0.32 and row_width_80 > 0.5
-        single_stroke_one = (
-            holes == 0.0
-            and repaired_holes == 0.0
-            and aspect_ratio < 0.72
-            and vc50 <= 1.45
-            and hr20 <= 1.15
-            and hr35 <= 1.15
-            and hr50 <= 1.15
-            and hr65 <= 1.15
-            and hr80 <= 1.15
-        )
-        curled_two = (
-            aspect_ratio > 0.92
-            and row_left_20 > 0.24
-            and row_left_50 > 0.26
-            and row_left_80 < 0.16
-            and row_width_80 > 0.5
-            and bottom > middle * 1.1
-        )
         repaired_loop = repaired_holes == 1.0 and repaired_largest_hole > 0.08
         broken_loop_zero = holes == 0.0 and repaired_loop
         balanced_zero = abs(left - right) < 0.1 and abs(top - bottom) < 0.1 and row_width_80 > 0.42
@@ -352,11 +333,9 @@ class DigitClassifier:
         if digit == 1:
             return (
                 8.0 * (holes == 0.0)
-                + 3.0 * single_stroke_one
                 + 4.0 * (aspect_ratio < 0.58)
                 + 3.0 * (hr20 <= 1.1 and hr50 <= 1.1 and hr80 <= 1.1)
                 + 2.5 * (vc50 <= 1.2)
-                + 1.5 * (aspect_ratio < 0.68 and vc50 <= 1.35)
                 + 1.0 * (features["vc35"] < 2.0)
                 + 2.0 * (features["center"] > max(left, right) * 1.7)
                 + 1.0 * (aspect_ratio < 0.52)
@@ -367,7 +346,6 @@ class DigitClassifier:
         if digit == 2:
             return (
                 6.0 * (holes == 0.0 or largest_hole < 0.03)
-                + 2.5 * curled_two
                 + 2.5 * (top > middle * 1.02)
                 + 3.0 * (bottom > middle * 1.15)
                 + 2.5 * (features["lower_left"] > features["lower_right"] * 1.05)
@@ -455,7 +433,6 @@ class DigitClassifier:
                 + 2.5 * (main_diag_runs > anti_diag_runs + 0.35)
                 + 1.0 * (row_left_50 < 0.18)
                 + 0.75 * (bottom > top * 1.6)
-                - 2.0 * curled_two
                 - 2.5 * (top > 0.26)
                 - 2.0 * (row_left_50 > 0.28)
                 - 2.5 * (anti_diag_runs > main_diag_runs + 0.2)
@@ -564,22 +541,7 @@ class DigitClassifier:
             if features["row_left_50"] >= 0.357:
                 return 2
             return 6
-        if pair == {4, 9} and abs(scores[4] - scores[9]) <= 5.0:
-            if (
-                features["holes"] >= 0.8
-                and features["hole_y"] < 0.46
-                and features["row_left_80"] > 0.42
-                and features["row_width_80"] < 0.24
-            ):
-                return 4
-            if (
-                features["holes"] < 0.2
-                and features["repaired_holes"] > 0.2
-                and features["top"] > features["bottom"] * 1.45
-                and features["row_left_80"] > 0.4
-                and features["row_width_80"] < 0.24
-            ):
-                return 9
+        if pair == {4, 9} and abs(scores[4] - scores[9]) <= 3.5:
             if features["col_top_50"] >= 0.182:
                 return 4
             return 9
