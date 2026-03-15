@@ -326,14 +326,6 @@ class DigitClassifier:
             and bottom > top * 1.25
             and hr80 >= 1.8
         )
-        hooked_two = (
-            row_left_50 > 0.4
-            and row_width_50 < 0.24
-            and features["lower_left"] > features["lower_right"] * 1.1
-            and row_width_80 > 0.52
-        )
-        top_loop_nine = holes >= 1.0 and hole_y < 0.34 and row_left_80 > 0.18 and row_width_80 < 0.34
-        three_like_five = main_diag_runs > anti_diag_runs + 0.45 and features["upper_right"] > features["upper_left"]
         slashed_nine = (
             holes == 0.0
             and top > bottom * 1.45
@@ -385,7 +377,6 @@ class DigitClassifier:
                 + 1.5 * (row_width_80 > 0.5)
                 + 1.5 * (row_left_20 < 0.38)
                 + 2.0 * sweeping_two
-                + 2.5 * hooked_two
                 + 1.5 * (main_diag_runs >= anti_diag_runs + 0.2)
                 - 1.5 * (row_left_50 < 0.3)
                 - 2.0 * (holes == 0.0)
@@ -439,7 +430,6 @@ class DigitClassifier:
                 - 1.0 * (main_diag_runs >= anti_diag_runs + 0.4)
                 - 1.0 * (row_left_50 > 0.32)
                 - 1.5 * (main_diag_runs > anti_diag_runs + 0.2)
-                - 2.0 * three_like_five
             )
         if digit == 6:
             return (
@@ -520,7 +510,6 @@ class DigitClassifier:
                 + 1.0 * (largest_hole > 0.03)
                 + 1.5 * (row_width_50 > 0.4)
                 + 1.5 * (repaired_holes > 0.45)
-                + 3.0 * top_loop_nine
                 + 0.5 * (col_top_50 < 0.11)
                 - 1.0 * (vc50 <= 1.6)
                 - 1.0 * (col_top_50 > 0.18)
