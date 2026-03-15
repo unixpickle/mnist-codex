@@ -592,10 +592,6 @@ class DigitClassifier:
             if features["lower_left"] >= 0.415:
                 return 2
             return 3
-        if pair == {2, 5} and abs(scores[2] - scores[5]) <= 4.0:
-            if features["anti_diag_runs"] > features["main_diag_runs"]:
-                return 5
-            return 2
         if pair == {2, 6} and abs(scores[2] - scores[6]) <= 3.0:
             if features["row_left_50"] >= 0.357:
                 return 2
