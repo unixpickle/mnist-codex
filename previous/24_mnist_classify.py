@@ -608,23 +608,6 @@ class DigitClassifier:
             if features["row_left_20"] < 0.25:
                 return 5
             return 6
-        if pair == {4, 5} and abs(scores[4] - scores[5]) <= 2.0:
-            if (
-                features["col_top_50"] > 0.24
-                or (features["row_left_80"] > 0.25 and features["vc50"] < 2.0)
-                or features["middle"] > features["bottom"] * 1.7
-            ):
-                return 4
-            return 5
-        if pair == {5, 7} and abs(scores[5] - scores[7]) <= 2.0:
-            if (
-                features["left"] > features["right"] * 1.35
-                or features["upper_left"] > features["upper_right"] * 1.08
-                or features["anti_diag_runs"] > features["main_diag_runs"] + 0.45
-                or features["row_left_50"] < 0.18
-            ):
-                return 5
-            return 7
         if pair == {6, 8} and abs(scores[6] - scores[8]) <= 3.0:
             if features["hr35"] <= 1.0:
                 return 6
