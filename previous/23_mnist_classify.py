@@ -593,8 +593,6 @@ class DigitClassifier:
                 return 9
             if features["col_top_50"] >= 0.182:
                 return 4
-            if features["col_top_50"] >= 0.1 and features["vc50"] <= 2.15:
-                return 4
             return 9
         if pair == {5, 6} and abs(scores[5] - scores[6]) <= 2.5:
             if features["repaired_holes"] == 1.0 and features["repaired_largest_hole"] > 0.02:
@@ -621,19 +619,11 @@ class DigitClassifier:
             ):
                 return 9
             return 7
-        if pair == {8, 9} and abs(scores[8] - scores[9]) <= 4.5:
+        if pair == {8, 9} and abs(scores[8] - scores[9]) <= 3.0:
             if features["holes"] >= 2.0 or features["repaired_holes"] >= 2.0:
                 return 8
             if features["holes"] == 1.0 and features["left"] >= features["right"] * 1.05:
                 return 8
-            if features["hole_y"] > 0.4 and features["bottom"] > 0.26:
-                return 8
-            if (
-                features["hole_y"] < 0.38
-                and features["bottom"] < 0.26
-                and features["row_left_80"] > 0.3
-            ):
-                return 9
             if (
                 features["holes"] == 1.0
                 and features["hr80"] >= 1.2
