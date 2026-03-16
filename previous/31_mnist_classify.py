@@ -383,36 +383,6 @@ class DigitClassifier:
             and aspect_ratio < 0.82
         )
         nine_like_eight = holes == 1.0 and hole_y < 0.4 and bottom < 0.3 and row_left_80 > 0.24
-        right_open_three = (
-            holes == 0.0
-            and right > left * 1.25
-            and row_left_50 > 0.3
-            and col_top_50 < 0.08
-        )
-        lower_loop_two = (
-            holes >= 1.0
-            and hole_y > 0.56
-            and largest_hole < 0.04
-            and features["lower_left"] > features["lower_right"] * 1.1
-        )
-        narrow_seven = (
-            holes == 0.0
-            and top > bottom * 1.5
-            and bottom < 0.18
-            and row_width_80 < 0.22
-        )
-        five_with_center_gap = (
-            holes == 0.0
-            and col_top_50 > 0.14
-            and anti_diag_runs >= main_diag_runs
-            and row_width_50 > 0.34
-        )
-        compact_top_nine = (
-            holes >= 1.0
-            and hole_y < 0.36
-            and bottom < 0.24
-            and row_left_80 > 0.28
-        )
         if digit == 0:
             return (
                 8.0 * (holes == 1.0)
@@ -452,7 +422,6 @@ class DigitClassifier:
                 + 2.5 * (top > middle * 1.02)
                 + 3.0 * (bottom > middle * 1.15)
                 + 2.5 * (features["lower_left"] > features["lower_right"] * 1.05)
-                + 2.0 * lower_loop_two
                 + 2.0 * (hr50 <= 1.2)
                 + 1.5 * (vc50 >= 1.8)
                 + 1.5 * (row_left_50 > 0.4)
@@ -476,10 +445,8 @@ class DigitClassifier:
                 + 2.0 * (hr20 <= 1.6 and hr80 <= 1.6)
                 + 1.5 * (vc50 >= 2.3)
                 + 2.0 * (vc50 >= 2.5)
-                + 2.0 * right_open_three
                 + 2.0 * (row_width_50 > 0.35)
                 + 1.5 * (row_left_80 > 0.16)
-                - 2.0 * five_with_center_gap
                 - 1.0 * false_lower_loop_two_strong
                 - 2.0 * (row_left_50 < 0.24)
                 - 2.0 * (left > right * 0.95)
@@ -562,7 +529,6 @@ class DigitClassifier:
                 + 3.0 * (top > bottom * 1.7)
                 + 2.5 * (hr80 <= 1.1)
                 + 2.0 * (hr65 <= 1.2)
-                + 2.0 * narrow_seven
                 + 1.5 * (features["upper_right"] > features["upper_left"])
                 + 1.0 * (col_top_50 < 0.091)
                 + 1.0 * (row_width_80 < 0.24)
@@ -607,7 +573,6 @@ class DigitClassifier:
                 + 1.5 * (row_left_80 > 0.35)
                 + 1.5 * (row_width_80 < 0.32)
                 + 1.0 * (largest_hole > 0.03)
-                + 2.0 * compact_top_nine
                 + 1.5 * (row_width_50 > 0.4)
                 + 1.5 * (repaired_holes > 0.45)
                 + 3.0 * top_loop_nine
