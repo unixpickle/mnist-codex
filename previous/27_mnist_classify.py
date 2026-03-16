@@ -341,14 +341,6 @@ class DigitClassifier:
             and features["lower_left"] > features["lower_right"] * 1.1
             and row_width_80 > 0.52
         )
-        false_lower_loop_two_strong = (
-            holes >= 0.8
-            and hole_y > 0.58
-            and row_left_50 > 0.38
-            and row_width_80 > 0.42
-            and aspect_ratio > 0.86
-            and hr80 > 1.7
-        )
         strong_four = (
             col_top_50 > 0.26
             and vc50 < 1.65
@@ -364,23 +356,6 @@ class DigitClassifier:
             and row_left_50 > 0.45
             and row_width_50 < 0.24
             and vc50 >= 2.0
-        )
-        broken_loop_nine_strong = (
-            holes < 0.2
-            and repaired_holes > 0.2
-            and top > bottom * 1.5
-            and row_left_80 > 0.42
-            and row_width_80 < 0.24
-            and col_top_50 < 0.12
-        )
-        open_top_six = (
-            holes < 0.4
-            and bottom > middle * 1.35
-            and row_left_20 > 0.38
-            and row_left_50 < 0.28
-            and row_width_80 > 0.62
-            and col_top_50 > 0.14
-            and aspect_ratio < 0.82
         )
         if digit == 0:
             return (
@@ -428,9 +403,7 @@ class DigitClassifier:
                 + 1.5 * (row_left_20 < 0.38)
                 + 2.0 * sweeping_two
                 + 2.5 * hooked_two
-                + 4.0 * false_lower_loop_two_strong
                 + 1.5 * (main_diag_runs >= anti_diag_runs + 0.2)
-                - 2.0 * open_top_six
                 - 1.5 * (row_left_50 < 0.3)
                 - 2.0 * (holes == 0.0)
                 - 1.5 * (row_width_50 > 0.38)
@@ -446,7 +419,6 @@ class DigitClassifier:
                 + 2.0 * (vc50 >= 2.5)
                 + 2.0 * (row_width_50 > 0.35)
                 + 1.5 * (row_left_80 > 0.16)
-                - 1.0 * false_lower_loop_two_strong
                 - 2.0 * (row_left_50 < 0.24)
                 - 2.0 * (left > right * 0.95)
                 - 1.5 * (features["lower_left"] > features["lower_right"] * 1.1)
@@ -463,7 +435,6 @@ class DigitClassifier:
                 + 1.5 * (right >= left * 0.9)
                 + 1.0 * (vc50 <= 1.4)
                 + 1.0 * (middle > bottom * 2.2)
-                - 2.0 * broken_loop_nine_strong
                 - 2.0 * broken_loop_nine
                 - 0.5 * (col_top_50 < 0.14)
             )
@@ -512,10 +483,8 @@ class DigitClassifier:
                 + 2.5 * (main_diag_runs > anti_diag_runs + 0.35)
                 + 1.0 * (row_left_50 < 0.18)
                 + 0.75 * (bottom > top * 1.6)
-                + 3.0 * open_top_six
                 - 2.0 * curled_two
                 - 2.5 * (top > 0.26)
-                - 1.0 * false_lower_loop_two_strong
                 - 2.0 * (row_left_50 > 0.28)
                 - 1.0 * false_lower_loop_two
                 - 2.5 * (anti_diag_runs > main_diag_runs + 0.2)
@@ -553,7 +522,6 @@ class DigitClassifier:
                 + 1.5 * (0.35 <= hole_y <= 0.65)
                 + 1.5 * (row_width_80 < 0.52)
                 + 1.5 * (features["lower_left"] > features["lower_right"] * 1.08)
-                - 3.0 * false_lower_loop_two_strong
                 - 2.0 * false_lower_loop_two
                 - 1.5 * (holes == 1.0 and largest_hole > 0.1)
             )
@@ -561,7 +529,6 @@ class DigitClassifier:
             return (
                 8.0 * (holes == 1.0)
                 + 3.5 * broken_loop_nine
-                + 3.0 * broken_loop_nine_strong
                 + 3.0 * slashed_nine
                 + 3.5 * (hole_y < 0.42)
                 + 2.5 * (top > bottom * 1.35)
