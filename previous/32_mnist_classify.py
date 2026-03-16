@@ -259,63 +259,6 @@ def extract_features(image: np.ndarray) -> dict[str, float]:
 
 
 class DigitClassifier:
-    def refine_prediction(self, features: dict[str, float], digit: int) -> int:
-        if self.looks_like_nine_not_eight(features, digit):
-            return 9
-        if self.looks_like_four_not_nine(features, digit):
-            return 4
-        if self.looks_like_two_not_six(features, digit):
-            return 2
-        if self.looks_like_two_not_eight(features, digit):
-            return 2
-        if self.looks_like_seven_not_three(features, digit):
-            return 7
-        if self.looks_like_eight_not_two(features, digit):
-            return 8
-        return digit
-
-    def looks_like_nine_not_eight(self, features: dict[str, float], digit: int) -> bool:
-        return digit == 8 and features["holes"] >= 1.0 and features["hole_y"] < 0.36 and features["bottom"] < 0.27
-
-    def looks_like_four_not_nine(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 9
-            and features["middle"] > features["bottom"] * 2.2
-            and features["row_left_80"] > 0.42
-            and features["col_top_50"] > 0.10
-        )
-
-    def looks_like_two_not_six(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 6
-            and features["row_left_50"] > 0.30
-            and features["anti_diag_runs"] > features["main_diag_runs"] + 0.25
-        )
-
-    def looks_like_two_not_eight(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 8
-            and features["hole_y"] > 0.60
-            and features["row_left_50"] > 0.36
-            and features["anti_diag_runs"] > features["main_diag_runs"] + 0.5
-        )
-
-    def looks_like_seven_not_three(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 3
-            and features["top"] > features["bottom"] * 1.8
-            and features["upper_right"] > features["upper_left"]
-        )
-
-    def looks_like_eight_not_two(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 2
-            and features["holes"] >= 1.0
-            and features["left"] >= features["right"] * 0.95
-            and features["row_left_50"] < 0.36
-            and features["lower_right"] < features["lower_left"] * 0.7
-        )
-
     def score_digit(self, features: dict[str, float], digit: int) -> float:
         holes = features["holes"]
         repaired_holes = features["repaired_holes"]
@@ -681,8 +624,7 @@ class DigitClassifier:
         order = sorted(range(10), key=lambda digit: scores[digit], reverse=True)
         best_digit = order[0]
         second_digit = order[1]
-        best_digit = self.break_tie(features, scores, best_digit, second_digit)
-        return self.refine_prediction(features, best_digit)
+        return self.break_tie(features, scores, best_digit, second_digit)
 
     def break_tie(
         self,
