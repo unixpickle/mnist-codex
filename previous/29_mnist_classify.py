@@ -608,12 +608,6 @@ class DigitClassifier:
                 and features["anti_diag_runs"] > features["main_diag_runs"] + 0.25
             ):
                 return 5
-            if (
-                features["right"] > features["left"] * 1.04
-                and features["row_left_50"] < 0.24
-                and features["main_diag_runs"] >= features["anti_diag_runs"] - 0.05
-            ):
-                return 3
             if features["right"] > features["left"] * 1.1 and features["row_left_50"] > 0.22:
                 return 3
             if features["anti_diag_runs"] > features["main_diag_runs"] + 0.2 and features["row_left_50"] < 0.26:
@@ -622,12 +616,6 @@ class DigitClassifier:
                 return 5
             return 3
         if pair == {2, 8} and abs(scores[2] - scores[8]) <= 2.5:
-            if (
-                features["hole_y"] > 0.6
-                and features["row_left_50"] > 0.36
-                and features["lower_left"] > features["lower_right"] * 1.05
-            ):
-                return 2
             if features["row_left_50"] > 0.45 and (
                 features["top"] < 0.34 or features["hole_y"] > 0.62
             ):
