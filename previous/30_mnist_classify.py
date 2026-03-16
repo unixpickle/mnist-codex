@@ -382,7 +382,6 @@ class DigitClassifier:
             and col_top_50 > 0.14
             and aspect_ratio < 0.82
         )
-        nine_like_eight = holes == 1.0 and hole_y < 0.4 and bottom < 0.3 and row_left_80 > 0.24
         if digit == 0:
             return (
                 8.0 * (holes == 1.0)
@@ -554,7 +553,6 @@ class DigitClassifier:
                 + 1.5 * (0.35 <= hole_y <= 0.65)
                 + 1.5 * (row_width_80 < 0.52)
                 + 1.5 * (features["lower_left"] > features["lower_right"] * 1.08)
-                - 3.0 * nine_like_eight
                 - 3.0 * false_lower_loop_two_strong
                 - 2.0 * false_lower_loop_two
                 - 1.5 * (holes == 1.0 and largest_hole > 0.1)
