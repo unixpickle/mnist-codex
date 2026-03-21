@@ -331,19 +331,8 @@ class DigitClassifier:
     def looks_like_two_not_six(self, features: dict[str, float], digit: int) -> bool:
         return (
             digit == 6
-            and (
-                (
-                    features["row_left_50"] > 0.30
-                    and features["anti_diag_runs"] > features["main_diag_runs"] + 0.25
-                )
-                or (
-                    features["aspect_ratio"] > 0.96
-                    and features["row_width_80"] > 0.62
-                    and features["row_left_80"] < 0.22
-                    and features["bottom"] > features["middle"] * 1.14
-                    and features["lower_left"] > features["lower_right"] * 1.1
-                )
-            )
+            and features["row_left_50"] > 0.30
+            and features["anti_diag_runs"] > features["main_diag_runs"] + 0.25
         )
 
     def looks_like_two_not_eight(self, features: dict[str, float], digit: int) -> bool:
@@ -756,12 +745,15 @@ class DigitClassifier:
         second_digit: int,
     ) -> int:
         pair = {best_digit, second_digit}
-        if pair == {3, 5} and abs(scores[3] - scores[5]) <= 1.5:
-            if features["left"] > features["right"] * 1.2:
+        if pair == {3, 5} and abs(scores[3] - scores[5]) <= 2.0:
+            if features["upper_left"] > features["upper_right"] * 1.18:
                 return 5
-            if features["anti_diag_runs"] > features["main_diag_runs"] + 0.65:
+            if features["left"] > features["right"] * 1.12:
                 return 5
-            if features["row_left_50"] < 0.18 and features["upper_left"] > features["upper_right"] * 1.05:
+            if (
+                features["row_left_50"] < 0.14
+                and features["upper_left"] > features["upper_right"] * 1.05
+            ):
                 return 5
             return 3
         if pair == {2, 8} and abs(scores[2] - scores[8]) <= 2.5:
@@ -777,13 +769,7 @@ class DigitClassifier:
                 return 2
             return 8
         if pair == {2, 3} and abs(scores[2] - scores[3]) <= 3.0:
-            if (
-                features["row_left_50"] > 0.5
-                and features["right"] > features["left"] * 1.45
-                and features["row_width_50"] < 0.22
-            ):
-                return 2
-            if features["lower_left"] >= 0.42:
+            if features["lower_left"] >= 0.415:
                 return 2
             return 3
         if pair == {2, 5} and abs(scores[2] - scores[5]) <= 4.0:
