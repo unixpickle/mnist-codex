@@ -264,20 +264,14 @@ class DigitClassifier:
             return 8
         if self.looks_like_five_not_three(features, digit):
             return 5
-        if self.looks_like_three_not_five(features, digit):
-            return 3
         if self.looks_like_nine_not_eight(features, digit):
             return 9
         if self.looks_like_four_not_nine(features, digit):
             return 4
-        if self.looks_like_six_not_two(features, digit):
-            return 6
         if self.looks_like_two_not_six(features, digit):
             return 2
         if self.looks_like_two_not_eight(features, digit):
             return 2
-        if self.looks_like_nine_not_seven(features, digit):
-            return 9
         if self.looks_like_seven_not_three(features, digit):
             return 7
         if self.looks_like_eight_not_two(features, digit):
@@ -299,15 +293,6 @@ class DigitClassifier:
             and features["upper_left"] > features["upper_right"] * 1.15
         )
 
-    def looks_like_three_not_five(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 5
-            and features["holes"] == 0.0
-            and features["right"] > features["left"] * 1.3
-            and features["row_left_50"] > 0.34
-            and features["row_width_50"] > 0.3
-        )
-
     def looks_like_nine_not_eight(self, features: dict[str, float], digit: int) -> bool:
         return digit == 8 and features["holes"] >= 1.0 and features["hole_y"] < 0.36 and features["bottom"] < 0.27
 
@@ -317,15 +302,6 @@ class DigitClassifier:
             and features["middle"] > features["bottom"] * 2.2
             and features["row_left_80"] > 0.42
             and features["col_top_50"] > 0.18
-        )
-
-    def looks_like_six_not_two(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 2
-            and features["bottom"] > features["top"] * 1.6
-            and features["main_diag_runs"] > features["anti_diag_runs"] + 0.35
-            and features["row_width_80"] > 0.62
-            and features["aspect_ratio"] < 0.85
         )
 
     def looks_like_two_not_six(self, features: dict[str, float], digit: int) -> bool:
@@ -348,15 +324,6 @@ class DigitClassifier:
             digit == 3
             and features["top"] > features["bottom"] * 1.8
             and features["upper_right"] > features["upper_left"]
-        )
-
-    def looks_like_nine_not_seven(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 7
-            and features["repaired_holes"] >= 1.0
-            and features["top"] > features["bottom"] * 1.6
-            and features["row_left_80"] > 0.3
-            and features["vc50"] >= 2.0
         )
 
     def looks_like_eight_not_two(self, features: dict[str, float], digit: int) -> bool:
