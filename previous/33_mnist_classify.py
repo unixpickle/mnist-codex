@@ -260,10 +260,6 @@ def extract_features(image: np.ndarray) -> dict[str, float]:
 
 class DigitClassifier:
     def refine_prediction(self, features: dict[str, float], digit: int) -> int:
-        if self.looks_like_eight_not_nine(features, digit):
-            return 8
-        if self.looks_like_five_not_three(features, digit):
-            return 5
         if self.looks_like_nine_not_eight(features, digit):
             return 9
         if self.looks_like_four_not_nine(features, digit):
@@ -277,21 +273,6 @@ class DigitClassifier:
         if self.looks_like_eight_not_two(features, digit):
             return 8
         return digit
-
-    def looks_like_eight_not_nine(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 9
-            and features["holes"] >= 1.0
-            and features["hole_y"] > 0.28
-            and features["row_width_80"] > 0.38
-        )
-
-    def looks_like_five_not_three(self, features: dict[str, float], digit: int) -> bool:
-        return (
-            digit == 3
-            and features["row_left_50"] < 0.16
-            and features["upper_left"] > features["upper_right"] * 1.15
-        )
 
     def looks_like_nine_not_eight(self, features: dict[str, float], digit: int) -> bool:
         return digit == 8 and features["holes"] >= 1.0 and features["hole_y"] < 0.36 and features["bottom"] < 0.27
