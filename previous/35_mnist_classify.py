@@ -332,8 +332,7 @@ class DigitClassifier:
             and features["holes"] >= 1.0
             and features["left"] >= features["right"] * 0.95
             and features["row_left_50"] < 0.36
-            and features["lower_right"] < features["lower_left"] * 0.55
-            and (features["row_width_80"] < 0.5 or features["holes"] >= 2.0)
+            and features["lower_right"] < features["lower_left"] * 0.7
         )
 
     def score_digit(self, features: dict[str, float], digit: int) -> float:
