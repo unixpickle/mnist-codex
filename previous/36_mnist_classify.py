@@ -301,7 +301,7 @@ class DigitClassifier:
             digit == 9
             and features["middle"] > features["bottom"] * 2.2
             and features["row_left_80"] > 0.42
-            and features["col_top_50"] > 0.18
+            and features["col_top_50"] > 0.10
         )
 
     def looks_like_two_not_six(self, features: dict[str, float], digit: int) -> bool:
@@ -315,7 +315,7 @@ class DigitClassifier:
         return (
             digit == 8
             and features["hole_y"] > 0.60
-            and features["row_left_50"] > 0.48
+            and features["row_left_50"] > 0.36
             and features["anti_diag_runs"] > features["main_diag_runs"] + 0.5
         )
 
