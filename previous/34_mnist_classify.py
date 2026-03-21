@@ -712,14 +712,27 @@ class DigitClassifier:
     ) -> int:
         pair = {best_digit, second_digit}
         if pair == {3, 5} and abs(scores[3] - scores[5]) <= 2.0:
-            if features["upper_left"] > features["upper_right"] * 1.18:
-                return 5
-            if features["left"] > features["right"] * 1.12:
+            if (
+                features["upper_left"] > features["upper_right"] * 1.08
+                and features["row_left_50"] < 0.24
+            ):
                 return 5
             if (
-                features["row_left_50"] < 0.14
-                and features["upper_left"] > features["upper_right"] * 1.05
+                features["left"] > features["right"] * 1.08
+                and features["anti_diag_runs"] > features["main_diag_runs"] + 0.25
             ):
+                return 5
+            if (
+                features["right"] > features["left"] * 1.04
+                and features["row_left_50"] < 0.24
+                and features["main_diag_runs"] >= features["anti_diag_runs"] - 0.05
+            ):
+                return 3
+            if features["right"] > features["left"] * 1.1 and features["row_left_50"] > 0.22:
+                return 3
+            if features["anti_diag_runs"] > features["main_diag_runs"] + 0.2 and features["row_left_50"] < 0.26:
+                return 5
+            if features["row_left_50"] < 0.14:
                 return 5
             return 3
         if pair == {2, 8} and abs(scores[2] - scores[8]) <= 2.5:
@@ -743,7 +756,7 @@ class DigitClassifier:
                 return 5
             return 2
         if pair == {2, 6} and abs(scores[2] - scores[6]) <= 5.0:
-            if features["aspect_ratio"] >= 0.84 or features["row_left_50"] >= 0.4:
+            if features["row_left_50"] >= 0.357:
                 return 2
             return 6
         if pair == {4, 9} and abs(scores[4] - scores[9]) <= 5.0:
@@ -762,7 +775,9 @@ class DigitClassifier:
                 and features["row_width_80"] < 0.24
             ):
                 return 9
-            if features["col_top_50"] >= 0.14:
+            if features["col_top_50"] >= 0.182:
+                return 4
+            if features["col_top_50"] >= 0.1 and features["vc50"] <= 2.15:
                 return 4
             return 9
         if pair == {5, 6} and abs(scores[5] - scores[6]) <= 2.5:
